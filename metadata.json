@@ -1,0 +1,5 @@
+{
+  "name": "Vibe Coding Scout",
+  "description": "An AI-powered tool to analyze YouTube video data and generate NotebookLM-compatible scout reports for Vibe Coding and Gemini ecosystem content.",
+  "requestFramePermissions": []
+}
