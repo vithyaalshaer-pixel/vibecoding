@@ -5,6 +5,8 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  // GitHub Pages 部署在子路径 /vibecoding/ 下，base 必须指定否则 CSS/JS 会 404
+  base: process.env.NODE_ENV === 'production' ? '/vibecoding/' : '/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, '.'),
