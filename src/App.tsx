@@ -5,21 +5,21 @@ import { autoScoutYouTubeVideos, generateVideoDetails, VideoData } from './gemin
 import { Loader2, Search, Play, ChevronLeft, Heart, MessageCircle, RefreshCw } from 'lucide-react';
 
 function cleanVideoId(idOrUrl: string): string | null {
-    if (!idOrUrl) return null;
+  if (!idOrUrl) return null;
 
-    // The ultimate YouTube ID regex
-    const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/; 
-    const match = idOrUrl.match(regex);
-    if (match && match[1]) {
-        return match[1];
-    }
+  // The ultimate YouTube ID regex
+  const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+  const match = idOrUrl.match(regex);
+  if (match && match[1]) {
+    return match[1];
+  }
 
-    // Fallback for cases where the regex might fail (e.g., just the ID string)
-    if (idOrUrl.length === 11 && !idOrUrl.includes('/') && !idOrUrl.includes('?')) {
-        return idOrUrl;
-    }
+  // Fallback for cases where the regex might fail (e.g., just the ID string)
+  if (idOrUrl.length === 11 && !idOrUrl.includes('/') && !idOrUrl.includes('?')) {
+    return idOrUrl;
+  }
 
-    return null;
+  return null;
 }
 
 export default function App() {
@@ -37,7 +37,7 @@ export default function App() {
     setError(null);
     setVideos([]);
     setProgress(0);
-    
+
     const progressInterval = setInterval(() => {
       setProgress(prev => Math.min(prev + Math.random() * 15, 95));
     }, 400);
@@ -78,16 +78,17 @@ export default function App() {
     }
   };
 
-    if (selectedVideo) {
+
+  if (selectedVideo) {
     const videoId = cleanVideoId(selectedVideo.videoId);
-    
+
     return (
       <div className="min-h-screen bg-white text-[#1D1D1F] font-serif selection:bg-red-100">
         {/* Navigation Bar */}
         <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 px-6 py-4">
           <div className="max-w-3xl mx-auto flex items-center justify-between">
-            <button 
-              onClick={() => setSelectedVideo(null)} 
+            <button
+              onClick={() => setSelectedVideo(null)}
               className="flex items-center text-gray-500 hover:text-black transition-colors font-sans text-sm font-medium"
             >
               <ChevronLeft className="w-4 h-4 mr-1" />
@@ -100,15 +101,15 @@ export default function App() {
           </div>
         </nav>
 
-                <main className="max-w-3xl mx-auto px-6 py-12">
+        <main className="max-w-3xl mx-auto px-6 py-12">
           {/* Video Player */}
           <div className="mb-12 rounded-xl overflow-hidden shadow-2xl shadow-black/10">
             <div className="aspect-video w-full bg-black">
               {videoId ? (
-                <iframe 
-                  src={`https://www.youtube.com/embed/${videoId}?autoplay=0`} 
-                  className="w-full h-full border-0" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                <iframe
+                  src={`https://www.youtube.com/embed/${videoId}?autoplay=0`}
+                  className="w-full h-full border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 ></iframe>
               ) : (
@@ -129,7 +130,7 @@ export default function App() {
             <div className="py-24 flex flex-col items-center justify-center text-center">
               <p className="text-red-500 font-sans text-lg mb-4">{detailError}</p>
               <button
-                onClick={() => handleSelectVideo(selectedVideo)} 
+                onClick={() => handleSelectVideo(selectedVideo)}
                 className="bg-[#0071E3] text-white px-6 py-2 rounded-full font-sans text-sm font-medium hover:bg-[#0077ED] transition-colors"
               >
                 重试 (Retry)
@@ -148,7 +149,7 @@ export default function App() {
                   <p>{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase()} · PAID</p>
                 </div>
               </div>
-              
+
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {selectedVideo.detailedEditorialSummary || ''}
               </ReactMarkdown>
@@ -169,6 +170,23 @@ export default function App() {
                   </ul>
                 </div>
               )}
+
+              {/* NotebookLM 按钮 */}
+              {videoId && (
+                <div className="my-8 flex justify-center">
+                  <a
+                    href={`https://notebooklm.google.com/notebook/new?source=https://www.youtube.com/watch?v=${videoId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-6 py-3 rounded-full font-sans text-sm font-semibold transition-all shadow-md hover:shadow-lg"
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" />
+                    </svg>
+                    在 NotebookLM 中深度提炼
+                  </a>
+                </div>
+              )}
             </div>
           )}
         </main>
@@ -185,7 +203,7 @@ export default function App() {
         <p className="text-xl text-[#86868B] max-w-2xl mx-auto mb-10 leading-relaxed">
           Discover the best AI engineering and Vibe Coding videos on YouTube, curated and analyzed by Gemini.
         </p>
-        
+
         <div className="max-w-2xl mx-auto mb-8 relative">
           <input
             type="text"
@@ -209,7 +227,7 @@ export default function App() {
           {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : <Search className="w-6 h-6" />}
           {isLoading ? '正在全网侦察... (Scouting...)' : '开始侦察 (Start Scout)'}
         </button>
-        
+
         {isLoading && (
           <div className="mt-8 max-w-md mx-auto">
             <div className="flex justify-between text-sm text-gray-500 mb-2 font-medium">
@@ -217,8 +235,8 @@ export default function App() {
               <span>{Math.round(progress)}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-              <div 
-                className="bg-[#0071E3] h-2.5 rounded-full transition-all duration-300 ease-out" 
+              <div
+                className="bg-[#0071E3] h-2.5 rounded-full transition-all duration-300 ease-out"
                 style={{ width: `${progress}%` }}
               ></div>
             </div>
@@ -238,21 +256,21 @@ export default function App() {
             {videos.map((video, idx) => {
               const videoId = cleanVideoId(video.videoId);
               return (
-                <div 
-                  key={idx} 
-                  onClick={() => handleSelectVideo(video)} 
+                <div
+                  key={video.videoId || idx}
+                  onClick={() => handleSelectVideo(video)}
                   className="bg-white rounded-[2rem] overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 cursor-pointer border border-gray-100 flex flex-col h-full group"
                 >
                   {/* Thumbnail */}
                   <div className="relative aspect-video bg-gray-100 overflow-hidden">
                     {videoId ? (
-                      <img 
-                        src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`} 
+                      <img
+                        src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
                         }}
                         alt={video.titleEn}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-400">
@@ -260,12 +278,12 @@ export default function App() {
                       </div>
                     )}
                     <div className="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-transparent transition-colors duration-300">
-                       <div className="bg-[#FF0000] text-white rounded-2xl px-5 py-3 shadow-lg transform transition-transform duration-300 group-hover:scale-110">
-                         <Play className="w-8 h-8 fill-current" />
-                       </div>
+                      <div className="bg-[#FF0000] text-white rounded-2xl px-5 py-3 shadow-lg transform transition-transform duration-300 group-hover:scale-110">
+                        <Play className="w-8 h-8 fill-current" />
+                      </div>
                     </div>
                   </div>
-                  
+
                   {/* Content */}
                   <div className="p-8 flex flex-col flex-grow">
                     <div className="flex flex-wrap gap-2 mb-5">
@@ -275,7 +293,7 @@ export default function App() {
                         </span>
                       ))}
                     </div>
-                    
+
                     <h3 className="text-[#0044CC] font-semibold text-xl leading-tight mb-2 line-clamp-2">
                       {video.titleEn}
                     </h3>
